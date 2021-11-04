@@ -37,6 +37,11 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'title' => 'required',
+            'content' => 'required',
+        ]);
+        
         $post = new Post();
         $post->title = $request->input('title');
         $post->content = $request->input('content');
@@ -66,7 +71,7 @@ class PostController extends Controller
     {
         return view('posts.edit', compact('post'));
     }
-
+    
     /**
      * Update the specified resource in storage.
      *
@@ -76,9 +81,17 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $request->validate([
+            'title' => 'required',
+            'content' => 'required',
+       ]);
+        
+        $post->title = $request->input('title');
+        $post->content = $request->input('content');
+        $post->save();
+        
+        return redirect()->route('posts.show', ['id' => $post->id])->with('message', 'Post was successfully updated.');
     }
-
     /**
      * Remove the specified resource from storage.
      *
